@@ -49,7 +49,7 @@ for node_id in node_id_new_rank:
     output += "NodeId:"
     output += str(node_id)
     output += "\t"
-    output += str(node_id_new_rank[node_id])
+    output += str(node_id_new_rank[node_id] * ALPHA + (1-ALPHA))
     output += ","
     output += str(node_id_old_rank[node_id])
     output += ","
