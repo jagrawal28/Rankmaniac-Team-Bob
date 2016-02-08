@@ -22,18 +22,19 @@ for line in sys.stdin:
 
     node_id = int(parsed_key[len("NodeId:"):])
 
+    if node_id not in node_id_new_rank:
+            node_id_new_rank[node_id] = 0.0
+
     parsed_value = parsed_key_value[1].split(",")
 
     if len(parsed_value) == 1:
 
         parsed_rank = float(parsed_value[0])
 
-        if node_id not in node_id_new_rank:
-            node_id_new_rank[node_id] = 0.0
-
         node_id_new_rank[node_id] += parsed_rank
 
     else:
+
         current_rank = float(parsed_value[0])
 
         node_id_old_rank[node_id] = current_rank
@@ -52,8 +53,11 @@ for node_id in node_id_new_rank:
     output += str(node_id_new_rank[node_id] * ALPHA + (1-ALPHA))
     output += ","
     output += str(node_id_old_rank[node_id])
-    output += ","
-    output += ",".join(node_id_links[node_id])
+    if len(node_id_links[node_id]) != 0:
+        output += ","
+        output += ",".join(node_id_links[node_id])
+    else:
+        output += "\n"
 
     sys.stdout.write(output)
 

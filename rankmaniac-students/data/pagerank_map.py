@@ -26,7 +26,11 @@ for line in sys.stdin:
     links = map(int, parsed_value[2:])
 
 
+
     for neighbor_id in links:
     	sys.stdout.write("NodeId:" + str(neighbor_id) + "\t" + str(current_rank/len(links)) + "\n")
+
+    if len(links) == 0:
+    	sys.stdout.write("NodeId:" + str(node_id) + "\t" + str(current_rank) + "\n")
 
     sys.stdout.write(line)
