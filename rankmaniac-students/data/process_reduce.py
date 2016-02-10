@@ -6,7 +6,7 @@ import sys
 # This program simply represents the identity function.
 #
 
-sum_squared_distances = 0.0
+max_ratio_distances = 0.0
 
 
 list_of_lines = []
@@ -34,7 +34,7 @@ for line in sys.stdin:
 
     links = map(int, parsed_value[2:])
 
-    sum_squared_distances += (current_rank - previous_rank)**2
+    max_ratio_distances = max(max_ratio_distances, float(abs(current_rank - previous_rank))/current_rank)
 
     final_rank_output = "FinalRank:" + str(current_rank) + "\t" + str(node_id) + "\n"
 
@@ -42,7 +42,7 @@ for line in sys.stdin:
 
 
 
-if sum_squared_distances < 0.005:
+if max_ratio_distances < 0.0005:
     # Finish
     #this isn't right
     list_of_final_rank_lines = sorted(list_of_final_rank_lines)
