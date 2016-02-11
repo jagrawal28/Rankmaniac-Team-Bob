@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import sys
+import heapq #wil this cause problems? Think is stdlib
 
 #
 # This program simply represents the identity function.
@@ -76,37 +77,34 @@ class NodeInformation(object):
 
 
 
-max_ratio_distances = 0.0
+#max_ratio_distances = 0.0
 
-max_iters = 0
 
-list_of_nodes = []
+top_nodes = []
 
 for line in sys.stdin:
 
     node = NodeInformation(line)
 
-    list_of_nodes.append(node)
-
-    max_ratio_distances = max(max_ratio_distances, float(abs(node.current_rank - node.previous_rank))/node.current_rank)
-
-    max_iters = max(max_iters, node.num_iters)
-
-
-
-
-if max_ratio_distances < 0.00000005 or max_iters > 47:
-    # Finish
-    #this isn't right
-    list_of_nodes.sort(key=lambda x: x.current_rank)
-    list_of_nodes.reverse()
-    for node in list_of_nodes[:20]:
-        node.emit_final_rank_string()
-
-else:
-    #Another iteration
-    for node in list_of_nodes:
+    if node.num_iters < 47:
         node.emit_string()
+
+    else:
+
+        top_nodes.append(node)
+
+        while len(top_nodes) > 20:
+
+            min_node = min(top_nodes, key=lambda x: x.current_rank)
+            top_nodes.remove(min_node)
+
+
+
+top_nodes.sort(key=lambda x: x.current_rank)
+top_nodes.reverse()
+
+for node in top_nodes:
+    node.emit_final_rank_string()
     
 
 
