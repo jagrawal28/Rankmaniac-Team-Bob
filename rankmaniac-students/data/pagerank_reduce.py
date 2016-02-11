@@ -34,7 +34,16 @@ class NodeInformation(object):
 
         self.previous_rank = float(parsed_value[1])
 
-        self.links = map(int, parsed_value[2:])
+        if len(parsed_value) > 2 and parsed_value[2].startswith("iters:"):
+            self.num_iters = int(parsed_value[2][len("iters:"):])
+            self.links = map(int, parsed_value[3:])
+
+        
+        else:
+            self.links = map(int, parsed_value[2:])
+            self.num_iters = 0
+        
+
 
     def emit_string(self):
         output_string = "NodeId:"
@@ -43,6 +52,9 @@ class NodeInformation(object):
         output_string += str(self.current_rank)
         output_string += ","
         output_string += str(self.previous_rank)
+        output_string += ","
+        output_string += "iters:"
+        output_string += str(self.num_iters)
 
         if len(self.links) != 0:
             output_string += ","
@@ -104,6 +116,8 @@ for node_id in node_information_dict:
     node.previous_rank = node.current_rank
 
     node.current_rank = 1-ALPHA
+
+    node.num_iters += 1
 
 for contribution in contribution_set:
 
