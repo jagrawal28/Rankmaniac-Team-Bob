@@ -70,8 +70,8 @@ class NodeInformation(object):
 
 
 
-    def final_rank_string(self):
-        return "FinalRank:" + str(node.current_rank) + "\t" + str(node.node_id) + "\n"
+    def emit_final_rank_string(self):
+        sys.stdout.write("FinalRank:" + str(node.current_rank) + "\t" + str(node.node_id) + "\n")
 
 
 
@@ -80,38 +80,33 @@ max_ratio_distances = 0.0
 
 max_iters = 0
 
-list_of_lines = []
-
-list_of_final_rank_lines = []
+list_of_nodes = []
 
 for line in sys.stdin:
 
-    list_of_lines.append(line)
-
     node = NodeInformation(line)
+
+    list_of_nodes.append(node)
 
     max_ratio_distances = max(max_ratio_distances, float(abs(node.current_rank - node.previous_rank))/node.current_rank)
 
     max_iters = max(max_iters, node.num_iters)
 
-    final_rank_output = node.final_rank_string()
-
-    list_of_final_rank_lines.append(final_rank_output)
 
 
 
 if max_ratio_distances < 0.00000005 or max_iters > 47:
     # Finish
     #this isn't right
-    list_of_final_rank_lines = sorted(list_of_final_rank_lines)
-    list_of_final_rank_lines.reverse()
-    for line in list_of_final_rank_lines[:20]:
-        sys.stdout.write(line)
+    list_of_nodes.sort(key=lambda x: x.current_rank)
+    list_of_nodes.reverse()
+    for node in list_of_nodes[:20]:
+        node.emit_final_rank_string()
 
 else:
     #Another iteration
-    for line in list_of_lines:
-        sys.stdout.write(line)
+    for node in list_of_nodes:
+        node.emit_string()
     
 
 

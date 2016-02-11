@@ -72,6 +72,12 @@ class NodeInformation(object):
         if len(self.links) == 0:
             sys.stdout.write("NodeId:" + str(self.node_id) + "\t" + str(self.current_rank) + "\n")
 
+    def emit_final_rank_string(self):
+        sys.stdout.write("FinalRank:" + str(node.current_rank) + "\t" + str(node.node_id) + "\n")
+
+
+
+
 
 
 
