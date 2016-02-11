@@ -80,31 +80,36 @@ class NodeInformation(object):
 #max_ratio_distances = 0.0
 
 
-top_nodes = []
+nodes = []
 
 for line in sys.stdin:
 
     node = NodeInformation(line)
 
-    if node.num_iters < 47:
+    nodes.append(node)
+
+current_top_nodes = sorted(nodes, key=lambda x: x.current_rank, reverse=True)[:50]
+previous_top_nodes = sorted(nodes, key=lambda x: x.previous_rank, reverse=True)[:50]
+
+
+
+ended = True
+
+for i in range(50):
+    if current_top_nodes[i] != previous_top_nodes[i] and current_top_nodes[i].num_iters < 47:
+        ended = False
+
+
+if ended:
+    for node in current_top_nodes[:20]:
+        node.emit_final_rank_string()
+
+
+else:
+    for node in nodes:
         node.emit_string()
 
-    else:
 
-        top_nodes.append(node)
-
-        while len(top_nodes) > 20:
-
-            min_node = min(top_nodes, key=lambda x: x.current_rank)
-            top_nodes.remove(min_node)
-
-
-
-top_nodes.sort(key=lambda x: x.current_rank)
-top_nodes.reverse()
-
-for node in top_nodes:
-    node.emit_final_rank_string()
     
 
 
