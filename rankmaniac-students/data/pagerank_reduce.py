@@ -13,6 +13,7 @@ contribution_set = set()
 
 ALPHA = 0.85
 
+sum_rank = 0.0
 
 # This is a class which gives us some simple operations
 # we can perform on nodes to get node information.
@@ -140,12 +141,16 @@ for node_id in node_information_dict:
 for contribution in contribution_set:
     # add all of the page rank contributions to the node from other nodes 
     node_information_dict[contribution.node_contributed_to].current_rank += ALPHA * contribution.value_contributed
+    
+    sum_rank += ALPHA * contribution.value_contributed
 
 
 # output 
 for node_id in node_information_dict:
-
+    
     node = node_information_dict[node_id]
+    
+    node.current_rank = node.current_rank / (sum_rank / len(node_information_dict))
 
     node.emit_string()
 
